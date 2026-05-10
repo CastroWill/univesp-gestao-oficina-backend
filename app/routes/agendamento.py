@@ -5,6 +5,12 @@ from app.database.connection import get_db
 from app.models.agendamento import Agendamento
 from app.schemas.agendamento import AgendamentoCreate
 
+from datetime import date
+from app.services.disponibilidade import (
+    HORARIOS_PADRAO,
+    formatar_horario
+)
+
 router = APIRouter()
 
 
@@ -46,3 +52,26 @@ def criar_agendamento(
         "mensagem": "Agendamento criado com sucesso",
         "id": novo_agendamento.id
     }
+
+@router.get("/horarios-disponiveis")
+def listar_horarios_disponiveis(
+    data: date,
+    db: Session = Depends(get_db)
+):
+
+    agendamentos = db.query(Agendamento).filter(
+        Agendamento.data_agendamento == data
+    ).all()
+
+    horarios_ocupados = {
+        agendamento.horario
+        for agendamento in agendamentos
+    }
+
+    horarios_disponiveis = [
+        formatar_horario(horario)
+        for horario in HORARIOS_PADRAO
+        if horario not in horarios_ocupados
+    ]
+
+    return horarios_disponiveis
