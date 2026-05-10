@@ -1,0 +1,48 @@
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+
+from app.database.connection import get_db
+from app.models.agendamento import Agendamento
+from app.schemas.agendamento import AgendamentoCreate
+
+router = APIRouter()
+
+
+@router.post("/agendamentos")
+def criar_agendamento(
+    agendamento: AgendamentoCreate,
+    db: Session = Depends(get_db)
+):
+
+    conflito = db.query(Agendamento).filter(
+        Agendamento.data_agendamento == agendamento.data_agendamento,
+        Agendamento.horario == agendamento.horario
+    ).first()
+
+    if conflito:
+        raise HTTPException(
+            status_code=400,
+            detail="Horário indisponível"
+        )
+
+    novo_agendamento = Agendamento(
+        nome_cliente=agendamento.nome_cliente,
+        telefone=agendamento.telefone,
+        email=agendamento.email,
+        placa=agendamento.placa,
+        modelo_veiculo=agendamento.modelo_veiculo,
+        ano_veiculo=agendamento.ano_veiculo,
+        descricao_problema=agendamento.descricao_problema,
+        data_agendamento=agendamento.data_agendamento,
+        horario=agendamento.horario,
+        status="PENDENTE"
+    )
+
+    db.add(novo_agendamento)
+    db.commit()
+    db.refresh(novo_agendamento)
+
+    return {
+        "mensagem": "Agendamento criado com sucesso",
+        "id": novo_agendamento.id
+    }
