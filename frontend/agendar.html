@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agendar Atendimento – Auto Mecânica Silva</title>
+
+    <!-- Bootstrap 5 via CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap Icons via CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* ── Cores principais ── */
+      :root {
+        --azul-principal: #1d4ed8;
+        --azul-hover: #1e40af;
+        --fundo-claro: #f0f4ff;
+      }
+
+      /* ── Fundo da página ── */
+      body {
+        background-color: var(--fundo-claro);
+      }
+
+      /* ── Navbar ── */
+      .navbar-brand span {
+        color: var(--azul-principal);
+        font-weight: 700;
+      }
+
+      /* ── Cabeçalho da página ── */
+      .page-header {
+        background-color: #fff;
+        border-bottom: 1px solid #dee2e6;
+      }
+      .page-header h2 {
+        font-weight: 700;
+      }
+
+      /* ── Card do formulário ── */
+      .card-formulario {
+        background-color: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 12px;
+        padding: 32px;
+      }
+
+      /* ── Títulos de seção dentro do formulário ── */
+      .secao-titulo {
+        font-weight: 600;
+        font-size: 1.05rem;
+        color: #1e293b;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e2e8f0;
+        margin-bottom: 20px;
+      }
+
+      /* ── Botões de horário (seleção de hora) ── */
+      .btn-horario {
+        border: 1px solid #dee2e6;
+        background-color: #fff;
+        color: #374151;
+        border-radius: 8px;
+        padding: 8px 16px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      /* Quando o horário está selecionado */
+      .btn-horario.selecionado,
+      .btn-horario:hover {
+        background-color: var(--azul-principal);
+        color: #fff;
+        border-color: var(--azul-principal);
+      }
+
+      /* ── Botão principal ── */
+      .btn-agendar {
+        background-color: var(--azul-principal);
+        color: #fff;
+        border: none;
+        padding: 12px 0;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: background-color 0.2s;
+      }
+      .btn-agendar:hover {
+        background-color: var(--azul-hover);
+        color: #fff;
+      }
+
+      /* ── Rodapé ── */
+      footer {
+        background-color: #1e293b;
+        color: #94a3b8;
+      }
+      footer a {
+        color: #cbd5e1;
+        text-decoration: none;
+      }
+      footer a:hover {
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ════════════════════════════════════════
+       NAVBAR – Barra de navegação superior
+  ════════════════════════════════════════ -->
+    <nav
+      class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm"
+    >
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <i class="bi bi-car-front-fill text-primary me-2"></i>
+          <span>Auto Mecânica Silva</span>
+        </a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#menuNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="menuNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">
+                <i class="bi bi-house me-1"></i>Início
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="agendar.html">
+                <i class="bi bi-calendar-check me-1"></i>Agendar
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="admin.html">
+                <i class="bi bi-grid me-1"></i>Administração
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ════════════════════════════════════════
+       CABEÇALHO DA PÁGINA
+  ════════════════════════════════════════ -->
+    <div class="page-header py-3 mb-4 bg-white">
+      <div class="container">
+        <!-- Seta de voltar + título -->
+        <div class="d-flex align-items-center gap-3">
+          <a href="index.html" class="text-muted text-decoration-none">
+            <i class="bi bi-arrow-left fs-5"></i>
+          </a>
+          <div>
+            <h2 class="mb-0">
+              <i class="bi bi-calendar-check text-primary me-2"></i>Agendar
+              Atendimento
+            </h2>
+            <p class="text-muted mb-0 small">
+              Preencha os dados abaixo para agendar seu horário
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════
+       FORMULÁRIO DE AGENDAMENTO
+  ════════════════════════════════════════ -->
+    <main class="container pb-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-7">
+          <div class="card-formulario">
+            <!-- ── SEÇÃO 1: Dados Pessoais ── -->
+            <h5 class="secao-titulo">Dados Pessoais</h5>
+
+            <div class="row g-3 mb-4">
+              <!-- Nome Completo -->
+              <div class="col-12 col-md-6">
+                <label for="nomeCompleto" class="form-label fw-semibold">
+                  Nome Completo <span class="text-danger">*</span>
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="nomeCompleto"
+                  placeholder="Digite seu nome completo"
+                  required
+                />
+              </div>
+
+              <!-- Telefone -->
+              <div class="col-12 col-md-6">
+                <label for="telefone" class="form-label fw-semibold">
+                  Telefone <span class="text-danger">*</span>
+                </label>
+                <input
+                  type="tel"
+                  class="form-control"
+                  id="telefone"
+                  placeholder="(11) 98765-4321"
+                  required
+                />
+              </div>
+
+              <!-- E-mail -->
+              <div class="col-12">
+                <label for="email" class="form-label fw-semibold">E-mail</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  placeholder="seu@email.com"
+                />
+              </div>
+            </div>
+            <!-- /Dados Pessoais -->
+
+            <!-- ── SEÇÃO 2: Dados do Veículo ── -->
+            <h5 class="secao-titulo">Dados do Veículo</h5>
+
+            <div class="row g-3 mb-4">
+              <!-- Placa -->
+              <div class="col-12 col-md-4">
+                <label for="placa" class="form-label fw-semibold">Placa</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="placa"
+                  placeholder="ABC-1234"
+                  maxlength="8"
+                />
+              </div>
+
+              <!-- Modelo -->
+              <div class="col-12 col-md-4">
+                <label for="modelo" class="form-label fw-semibold"
+                  >Modelo</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="modelo"
+                  placeholder="Ex: Gol, Civic"
+                />
+              </div>
+
+              <!-- Ano -->
+              <div class="col-12 col-md-4">
+                <label for="ano" class="form-label fw-semibold">Ano</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="ano"
+                  placeholder="2020"
+                  min="1980"
+                  max="2025"
+                />
+              </div>
+
+              <!-- Descrição do Problema -->
+              <div class="col-12">
+                <label for="descricao" class="form-label fw-semibold">
+                  Descrição do Problema
+                </label>
+                <textarea
+                  class="form-control"
+                  id="descricao"
+                  rows="4"
+                  placeholder="Descreva o problema ou serviço desejado (ex: barulho no motor, troca de óleo, revisão)"
+                ></textarea>
+              </div>
+            </div>
+            <!-- /Dados do Veículo -->
+
+            <!-- ── SEÇÃO 3: Data e Horário ── -->
+            <h5 class="secao-titulo">Data e Horário</h5>
+
+            <div class="mb-3">
+              <!-- Escolha de data -->
+              <label for="dataAtendimento" class="form-label fw-semibold">
+                <i class="bi bi-calendar me-1 text-muted"></i>
+                Escolha a Data <span class="text-danger">*</span>
+              </label>
+              <input
+                type="date"
+                class="form-control"
+                id="dataAtendimento"
+                style="max-width: 240px"
+                required
+              />
+            </div>
+
+            <div class="mb-4">
+              <!-- Seleção de horário -->
+              <label class="form-label fw-semibold">
+                <i class="bi bi-clock me-1 text-muted"></i>
+                Horários Disponíveis <span class="text-danger">*</span>
+              </label>
+
+              <!--
+              Dica para iniciantes:
+              Esses botões usam uma classe CSS personalizada "btn-horario".
+              O JavaScript simples abaixo alterna a classe "selecionado" ao clicar.
+            -->
+              <div class="d-flex flex-wrap gap-2" id="horarios"></div>
+            </div>
+
+            <!-- ── Botões de ação ── -->
+            <div class="row g-2">
+              <div class="col-12 col-md-8">
+                <button
+                  type="button"
+                  id="btnAgendar"
+                  class="btn btn-agendar w-100"
+                >
+                  Enviar Agendamento
+                </button>
+              </div>
+              <div class="col-12 col-md-4">
+                <a
+                  href="index.html"
+                  class="btn btn-outline-secondary w-100 py-2"
+                >
+                  Cancelar
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- /card-formulario -->
+        </div>
+      </div>
+    </main>
+
+    <!-- ════════════════════════════════════════
+       RODAPÉ
+  ════════════════════════════════════════ -->
+    <footer class="py-4">
+      <div class="container text-center">
+        <p class="mb-1">
+          &copy; 2025 <strong class="text-white">Auto Mecânica Silva</strong>
+          – Confiança e qualidade há mais de 20 anos.
+        </p>
+        <p class="small mb-0">
+          <a href="index.html">Início</a> &middot;
+          <a href="agendar.html">Agendar</a> &middot;
+          <a href="admin.html">Administração</a>
+        </p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!--
+    ── JavaScript simples para seleção de horário ──
+    Ao clicar em um botão, remove "selecionado" de todos
+    e adiciona apenas no botão clicado.
+  -->
+    <script>
+      function selecionarHorario(botao) {
+        // Remove a classe "selecionado" de todos os botões de horário
+        document.querySelectorAll(".btn-horario").forEach(function (btn) {
+          btn.classList.remove("selecionado");
+        });
+        // Adiciona "selecionado" somente no botão clicado
+        botao.classList.add("selecionado");
+      }
+    </script>
+  </body>
+</html>
